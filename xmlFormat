@@ -1,0 +1,24 @@
+var xmlPost = "<?xml version=\"1.0\" encoding= \"UTF-8\"?>" +
+                "<recepcoesNFE xsi:schemaLocation=\"http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd\" xmlns=\"http://www.pucomex.serpro.gov.br/cct\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" > " +
+
+        "<recepcaoNFe>" +
+        "<identificacaoRecepcao>3763996</identificacaoRecepcao>" +
+        "<cnpjResp>02003402000760</cnpjResp>" +
+            "<local>" +
+                "<codigoURF>0817800</codigoURF>" +
+                "<codigoRA>8931321</codigoRA>" +
+            "</local>" +
+        "<referenciaLocalRecepcao>Informaçãodereferênciadolocaldarecepção</referenciaLocalRecepcao>" +
+        "<notasFiscais>" +
+        "<notaFiscalEletronica>" +
+        "<chaveAcesso>50200702003402001066550120000330171031152082</chaveAcesso>" +
+        "</notaFiscalEletronica>" +
+        "</notasFiscais>" +
+        "<transportador>" +
+        "<cpf>44655223120</cpf>" +
+        "<cpfCondutor>44655223120</cpfCondutor>" +
+        "</transportador>" +
+        "<pesoAferido>31550.000</pesoAferido>" +
+        "<observacoesGerais>Não se aplica</observacoesGerais>" +
+        "</recepcaoNFe>" +
+        "</recepcoesNFE>";

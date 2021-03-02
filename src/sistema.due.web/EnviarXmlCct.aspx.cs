@@ -52,17 +52,16 @@ namespace Cargill.DUE.Web
             string[] source = File.ReadAllLines(@"C:\Users\MLED2\Documents\projects\csv\notas.csv");
 
             //String xml = "";
-            //XNamespace xmlns = XNamespace.Get("http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd");
-            //XNamespace xsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
-            //XNamespace schemaLocation = XNamespace.Get("http://www.pucomex.serpro.gov.br/cct");
-            XDocument doc = new XDocument(
-            new XDeclaration("1.0", "utf-8", "yes"),
+            XNamespace xmlns = XNamespace.Get("http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd");
+            XNamespace xsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
+            XNamespace schemaLocation = XNamespace.Get("http://www.pucomex.serpro.gov.br/cct");
+            //XDocument doc = new XDocument(
+            //new XDeclaration("1.0", "utf-8", "yes"),
             //new XComment("This is a comment"),
-            
-            new XElement("recepcoesNFE",
-                        //new XAttribute(xsi + "schemalocation", schemaLocation),
-                        //new XAttribute(XNamespace.Xmlns + "xsi", xsi),
-                        
+            //string xml = "xsi:schemaLocation=\"http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd\" xmlns=\"http://www.pucomex.serpro.gov.br/cct\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
+            var doc= new XElement(xmlns + "recepcoesNFE",
+                        new XAttribute(xsi + "schemaLocation", schemaLocation),
+                        new XAttribute(XNamespace.Xmlns + "xsi", xsi),
 
             from items in source
 
@@ -87,41 +86,14 @@ namespace Cargill.DUE.Web
             ),
             new XElement("pesoAferido", fields[7]),
             new XElement("observacoesGerais", fields[8])
-
-            //new XElement("Column4", fields[3]),
-
-            //new XElement("Column5", fields[4])
-
-            ))
+            )
 
             );
             string url = "/cct/api/ext/carga/recepcao-nfe";
             string cpfCertificado = "27501846812";
-            //var xmlPost = doc.ToString();
-            var xmlPost = "<?xml version=\"1.0\" encoding= \"UTF-8\"?>" +
-                "<recepcoesNFE xsi:schemaLocation=\"http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd\" xmlns=\"http://www.pucomex.serpro.gov.br/cct\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" > " +
+            var xmlPost = doc.ToString();
+            //var xmlPost = "<recepcoesNFE xsi:schemaLocation=\"http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd\" xmlns=\"http://www.pucomex.serpro.gov.br/cct\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><recepcaoNFE><identificacaoRecepcao>4005329</identificacaoRecepcao><cnpjResp>02003402000760</cnpjResp><local><codigoURF>0817800</codigoURF><codigoRA>8931321</codigoRA></local><notasFiscais><notaFiscalEletronica><chaveAcesso>35210302003402000841550110001170781033306303</chaveAcesso></notaFiscalEletronica></notasFiscais><transportador><cnpj>20756544000608</cnpj><cpfCondutor>00286683679</cpfCondutor></transportador><pesoAferido>33250.000</pesoAferido><observacoesGerais>Não se aplica</observacoesGerais></recepcaoNFE></recepcoesNFE>";
 
-        "<recepcaoNFe>" +
-        "<identificacaoRecepcao>3763996</identificacaoRecepcao>" +
-        "<cnpjResp>02003402000760</cnpjResp>" +
-            "<local>" +
-                "<codigoURF>0817800</codigoURF>" +
-                "<codigoRA>8931321</codigoRA>" +
-            "</local>" +
-        "<referenciaLocalRecepcao>Informaçãodereferênciadolocaldarecepção</referenciaLocalRecepcao>" +
-        "<notasFiscais>" +
-        "<notaFiscalEletronica>" +
-        "<chaveAcesso>50200702003402001066550120000330171031152082</chaveAcesso>" +
-        "</notaFiscalEletronica>" +
-        "</notasFiscais>" +
-        "<transportador>" +
-        "<cpf>44655223120</cpf>" +
-        "<cpfCondutor>44655223120</cpfCondutor>" +
-        "</transportador>" +
-        "<pesoAferido>31550.000</pesoAferido>" +
-        "<observacoesGerais>Não se aplica</observacoesGerais>" +
-        "</recepcaoNFe>" +
-        "</recepcoesNFE>";
 
 
             //SisComexService.SubmitXmlRequest(url, xmlPost);

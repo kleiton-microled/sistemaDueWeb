@@ -193,7 +193,7 @@ namespace Sistema.DUE.Web.Services
                     foreach (var header in headers)
                         client.DefaultRequestHeaders.Add(header.Key, header.Value);
 
-                    xml = xml.Replace("\r", string.Empty)/*.Replace(" ", "")*/;
+                    xml = xml.Replace("\r\n", string.Empty).Replace(" ", "").Replace("\\", "<");
 
                     using (var stringContent = new StringContent(xml, Encoding.UTF8, "application/xml"))
                     {
