@@ -19,6 +19,7 @@ using System.IO;
 using RestSharp;
 using NUnit.Framework;
 using RestSharp.Authenticators;
+using System.Xml;
 
 namespace Sistema.DUE.Web.Services
 {
@@ -31,7 +32,94 @@ namespace Sistema.DUE.Web.Services
         {
             return true;
         }
+        public static XmlDocument SubmitXmlRequest(string apiUrl, string reqXml)
+        {
+            XmlDocument xmlResponse = null;
+            HttpWebResponse httpWebResponse = null;
+            Stream requestStream = null;
+            Stream responseStream = null;
+            Token token = null;
+            string cpfCertificado = "27501846812";
+            if (HttpContext.Current.Session["TOKEN"] == null)
+            {
+                token = ObterToken(cpfCertificado);
+            }
+            else
+            {
+                token = (Token)HttpContext.Current.Session["TOKEN"];
+            }
+            // Create HttpWebRequest for the API URL.
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(new Uri(UrlSiscomex) + "cct/api/ext/carga/recepcao-nfe");
 
+            try
+            {
+                // Set HttpWebRequest properties
+                var bytes = Encoding.ASCII.GetBytes(reqXml);
+                httpWebRequest.Method = "POST";
+                httpWebRequest.ContentLength = bytes.Length;
+                httpWebRequest.ContentType = "application/xml";
+                httpWebRequest.Headers["Authorization"] = token.SetToken;
+                httpWebRequest.Headers["X-CSRF-Token"] = token.CsrfToken;
+
+                //Get Stream object
+                requestStream = httpWebRequest.GetRequestStream();
+                requestStream.Write(bytes, 0, bytes.Length);
+                requestStream.Close();
+
+                // Post the Request.
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+
+                // If the submission is success, Status Code would be OK
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    // Read response
+                    responseStream = httpWebResponse.GetResponseStream();
+
+                    if (responseStream != null)
+                    {
+                        var objXmlReader = new XmlTextReader(responseStream);
+
+                        // Convert Response stream to XML
+                        var xmldoc = new XmlDocument();
+                        xmldoc.Load(objXmlReader);
+                        xmlResponse = xmldoc;
+                        objXmlReader.Close();
+                    }
+                }
+
+                // Close Response
+                httpWebResponse.Close();
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(webException.Message);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                // Release connections
+                if (requestStream != null)
+                {
+                    requestStream.Close();
+                }
+
+                if (responseStream != null)
+                {
+                    responseStream.Close();
+                }
+
+                if (httpWebResponse != null)
+                {
+                    httpWebResponse.Close();
+                }
+            }
+
+            // Return API Response
+            return xmlResponse;
+        }
         public static Token Autenticar(string cpfCertificado)
         {
             var token = new Token();
@@ -89,7 +177,31 @@ namespace Sistema.DUE.Web.Services
 
             return token;
         }
+        public static HttpResponseMessage CriarRequestKleiton(string url, IDictionary<string, string> headers, string xml, string certificado)
+        {
+            using (var handler = new WebRequestHandler())
+            {
+                handler.ClientCertificates.Add(ObterCertificado(certificado));
+                ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidate;
 
+                using (var client = new HttpClient(handler))
+                {
+
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+
+                    foreach (var header in headers)
+                        client.DefaultRequestHeaders.Add(header.Key, header.Value);
+
+                    xml = xml.Replace("\r", string.Empty)/*.Replace(" ", "")*/;
+
+                    using (var stringContent = new StringContent(xml, Encoding.UTF8, "application/xml"))
+                    {
+                        return client.PostAsync(new Uri(UrlSiscomex + url), stringContent).Result;
+                    }
+                }
+            }
+        }
         public static string CriarRequestGet(string url, IDictionary<string, string> headers, string certificado)
         {
             using (var handler = new WebRequestHandler())

@@ -3,7 +3,11 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     
-    <asp:Button ID="btnValidaToken" runat="server" OnClick="btnValidaToken_Click" Text="VALIDAR_TOKEN" />
+    <asp:FileUpload ID="FileUpload1" runat="server" />
+    
+    <asp:Button ID="btnValidaToken" runat="server" OnClick="btnValidaToken_Click" Text="UPLOAD CSV" Width="178px" />
+    
+    <asp:Label ID="lblResult" runat="server" Text="Label"></asp:Label>
     
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Scripts" runat="server">
