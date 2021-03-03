@@ -22,52 +22,50 @@ namespace Cargill.DUE.Web
 
         protected void btnValidaToken_Click(object sender, EventArgs e)
         {
-            //string cpf = "27501846812";
-            //string url = "https://val.portalunico.siscomex.gov.br/cct/ext/carga/recepcao-nfe/ext/carga/recepcao-nfe";
-            //string xml = "<nfe>teste</nfe>";
-            //SisComexService.PostWithXmlData(cpf);
+            string file = "";
+            string cpf = "27501846812";
+            SisComexService.PostWithXmlData(cpf);
             //var Teste = SisComexService.EnviarXmlCct(cpf);
-            //String path = @"C:\Users\MLED2\Documents\projects\csv\";
+            String path = AppDomain.CurrentDomain.BaseDirectory;
 
-            //if (FileUpload1.HasFile)
-            //{
-            //    String str = Server.HtmlEncode(FileUpload1.FileName);
-            //    String ext = Path.GetExtension(str);
-
-            //    if ((ext == ".csv"))
-            //    {
-            //        path += str;
-            //        FileUpload1.SaveAs(path);
-            //        lblResult.Text = "arquivo validado com sucesso";
-            //    }
-            //    else
-            //    {
-            //        lblResult.Text = "nao foi possivel validar o arquivo";
-            //    }
-            //}
-            ConvertXml();
+            if (txtUpload.HasFile)
+            {
+                String str = Server.HtmlEncode(txtUpload.FileName);
+                String ext = Path.GetExtension(str);
+                file = str;
+                if ((ext == ".csv"))
+                {
+                    path += str;
+                    txtUpload.SaveAs(path);
+                    lblResult.Text = "arquivo validado com sucesso";
+                }
+                else
+                {
+                    lblResult.Text = "nao foi possivel validar o arquivo";
+                }
+            }
+            ConvertXml(file);
         }
-        private void ConvertXml()
+        private void ConvertXml(string file)
         {
-            string[] source = File.ReadAllLines(@"C:\Users\MLED2\Documents\projects\csv\notas.csv");
+            string[] source = File.ReadAllLines(@"C:\Users\carva\Documents\projects\sistemaDueWeb\" + file);
 
             //String xml = "";
             XNamespace xmlns = XNamespace.Get("http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd");
             XNamespace xsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
             XNamespace schemaLocation = XNamespace.Get("http://www.pucomex.serpro.gov.br/cct");
-            //XDocument doc = new XDocument(
+            XDocument doc = new XDocument(
             //new XDeclaration("1.0", "utf-8", "yes"),
             //new XComment("This is a comment"),
-            //string xml = "xsi:schemaLocation=\"http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd\" xmlns=\"http://www.pucomex.serpro.gov.br/cct\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
-            var doc= new XElement(xmlns + "recepcoesNFE",
-                        new XAttribute(xsi + "schemaLocation", schemaLocation),
-                        new XAttribute(XNamespace.Xmlns + "xsi", xsi),
+            new XElement("recepcoesNFE",
+                        //new XAttribute(xsi + "schemaLocation", schemaLocation),
+                        //new XAttribute(XNamespace.Xmlns + "xsi", xsi),
 
             from items in source
 
             let fields = items.Split(';')
 
-            select new XElement("recepcaoNFe",
+            select new XElement("recepcaoNFE",
 
             new XElement("identificacaoRecepcao", fields[0]),
 
@@ -81,18 +79,20 @@ namespace Cargill.DUE.Web
                 new XElement("chaveAcesso", fields[4])
                 )),
             new XElement("transportador",
-            new XElement("cpf", fields[5]),
+            new XElement("cnpj", fields[5]),
             new XElement("cpfCondutor", fields[6])
             ),
             new XElement("pesoAferido", fields[7]),
             new XElement("observacoesGerais", fields[8])
-            )
+            ))
 
             );
             string url = "/cct/api/ext/carga/recepcao-nfe";
             string cpfCertificado = "27501846812";
             var xmlPost = doc.ToString();
-            //var xmlPost = "<recepcoesNFE xsi:schemaLocation=\"http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd\" xmlns=\"http://www.pucomex.serpro.gov.br/cct\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><recepcaoNFE><identificacaoRecepcao>4005329</identificacaoRecepcao><cnpjResp>02003402000760</cnpjResp><local><codigoURF>0817800</codigoURF><codigoRA>8931321</codigoRA></local><notasFiscais><notaFiscalEletronica><chaveAcesso>35210302003402000841550110001170781033306303</chaveAcesso></notaFiscalEletronica></notasFiscais><transportador><cnpj>20756544000608</cnpj><cpfCondutor>00286683679</cpfCondutor></transportador><pesoAferido>33250.000</pesoAferido><observacoesGerais>Não se aplica</observacoesGerais></recepcaoNFE></recepcoesNFE>";
+            var xdoc = xmlPost.Replace("\r\n", "").Replace(" ", "");
+            var xmlOk = xdoc.Replace("<recepcoesNFE>", "<recepcoesNFE xsi:schemaLocation=\"http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd\" xmlns=\"http://www.pucomex.serpro.gov.br/cct\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"); 
+            //var xmlPost1 = "<recepcoesNFE xsi:schemaLocation=\"http://www.pucomex.serpro.gov.br/cct RecepcaoNFE.xsd\" xmlns=\"http://www.pucomex.serpro.gov.br/cct\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><recepcaoNFE><identificacaoRecepcao>4005329</identificacaoRecepcao><cnpjResp>02003402000760</cnpjResp><local><codigoURF>0817800</codigoURF><codigoRA>8931321</codigoRA></local><notasFiscais><notaFiscalEletronica><chaveAcesso>35210302003402000841550110001170781033306303</chaveAcesso></notaFiscalEletronica></notasFiscais><transportador><cnpj>20756544000608</cnpj><cpfCondutor>00286683679</cpfCondutor></transportador><pesoAferido>33250.000</pesoAferido><observacoesGerais>Não se aplica</observacoesGerais></recepcaoNFE></recepcoesNFE>";
 
 
 
