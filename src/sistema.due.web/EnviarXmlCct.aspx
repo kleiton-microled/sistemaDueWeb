@@ -32,12 +32,15 @@
                                         <div class="form-group">
                                             <div class="col-md-6">
                                                 <asp:Button ID="btnImport" runat="server" OnClick="btnValidaToken_Click" Text="IMPORTAR" Width="136px" />
-                                                
                                             </div>
-
                                         </div>
                                     </div>
+                                    <div id="result" style="margin-top:50px; border:1px dashed #cccccc">
+                                            <asp:GridView ID="GridView1" runat="server" CssClass="table table-light" BorderWidth="0" OnRowDataBound="GridView1_RowDataBound">     
+                                            </asp:GridView>
+                                    </div>
                               </div>
+
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Scripts" runat="server">
     <asp:Label ID="lblContentResult" runat="server" Text="Label" Visible="False"></asp:Label>

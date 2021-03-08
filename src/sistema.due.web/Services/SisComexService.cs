@@ -177,7 +177,7 @@ namespace Sistema.DUE.Web.Services
 
             return token;
         }
-        public static HttpResponseMessage CriarRequestKleiton(string url, IDictionary<string, string> headers, string xml, string certificado)
+        public static  HttpResponseMessage CriarRequestKleiton(string url, IDictionary<string, string> headers, string xml, string certificado)
         {
             using (var handler = new WebRequestHandler())
             {
@@ -201,6 +201,7 @@ namespace Sistema.DUE.Web.Services
                     }
                 }
             }
+        
         }
         public static string CriarRequestGet(string url, IDictionary<string, string> headers, string certificado)
         {

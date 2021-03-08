@@ -390,6 +390,7 @@
     <Compile Include="Models\NotaFiscalConsultaCCT.cs" />
     <Compile Include="Models\PaisesDanfe.cs" />
     <Compile Include="Models\ProdutoNfe.cs" />
+    <Compile Include="Models\RetornoXmlCCT.cs" />
     <Compile Include="Models\XmlCct.cs" />
     <Compile Include="Properties\Settings1.Designer.cs">
       <AutoGen>True</AutoGen>
