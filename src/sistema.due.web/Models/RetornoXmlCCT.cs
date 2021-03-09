@@ -16,6 +16,15 @@ namespace Cargill.DUE.Web.Models
         [XmlElement]
         public string code { get; set; }
 
+        public RetornoXmlCCT(string message, string status, string code)
+        {
+            this.message = message;
+            this.status = status;
+            this.code = code;
+        }
+        public RetornoXmlCCT()
+        {
 
+        }
     }
 }

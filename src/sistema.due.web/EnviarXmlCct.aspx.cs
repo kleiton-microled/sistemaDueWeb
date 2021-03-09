@@ -71,8 +71,10 @@ namespace Cargill.DUE.Web
                         if (xml.Contains("<error>")) { _xmlRootAttribute = "error"; } else { _xmlRootAttribute = "retornoServico"; }
                         var serializer = new XmlSerializer(typeof(RetornoXmlCCT), new XmlRootAttribute(_xmlRootAttribute));
                         //RetornoXmlCCT result;
+                        var sucesso = new RetornoXmlCCT("Recepção efetuada com sucesso", "200", "CCTR-1");
                         using (TextReader reader = new StringReader(xml))
                         {
+                            if (_xmlRootAttribute == "retornoServico") { responseCct.Add(sucesso); }
                             responseCct.Add((RetornoXmlCCT)serializer.Deserialize(reader));
                         }
                     }
@@ -109,6 +111,10 @@ namespace Cargill.DUE.Web
                 if (e.Row.Cells[2].Text == "CCTR-ER0122")
                 {
                     e.Row.BackColor = Color.FromArgb(245, 198, 203);
+                }
+                if (e.Row.Cells[2].Text == "CCTR-1")
+                {
+                    e.Row.BackColor = Color.FromArgb(195,230,203);
                 }
             }
         }
