@@ -196,6 +196,7 @@
     <Content Include="favicon.ico" />
     <Content Include="ImportarDUE.aspx" />
     <Content Include="ResumoDUE.aspx" />
+    <Content Include="Test.aspx" />
     <Content Include="TrocarSenha.aspx" />
     <Content Include="ListagemMemorando.aspx" />
     <Content Include="ConsultarNotasFiscais.aspx" />
@@ -387,6 +388,7 @@
     <Compile Include="Models\DadosRelatorioDUE.cs" />
     <Compile Include="Models\DUEItemDetalhesACNF.cs" />
     <Compile Include="Models\FiltroConsultaPreACD.cs" />
+    <Compile Include="Models\IdentificadorNFE.cs" />
     <Compile Include="Models\NotaFiscalConsultaCCT.cs" />
     <Compile Include="Models\PaisesDanfe.cs" />
     <Compile Include="Models\ProdutoNfe.cs" />
@@ -533,6 +535,13 @@
     <Compile Include="RetificacaoSemServico\TimeoutHandler.cs" />
     <Compile Include="Services\ServicoSiscomex2.cs" />
     <Compile Include="Services\SisComexService.cs" />
+    <Compile Include="Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+    </Compile>
     <Compile Include="TrocarSenha.aspx.cs">
       <DependentUpon>TrocarSenha.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

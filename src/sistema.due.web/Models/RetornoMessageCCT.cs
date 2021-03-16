@@ -6,9 +6,9 @@ using System.Xml.Serialization;
 
 namespace Cargill.DUE.Web.Models
 {
+    [XmlRoot]
     public class RetornoXmlCCT
     {
-
         [XmlElement]
         public string message { get; set; }
         [XmlElement]
@@ -16,18 +16,15 @@ namespace Cargill.DUE.Web.Models
         [XmlElement]
         public string code { get; set; }
 
-        public string Identificador { get; set; }
+        [XmlIgnore]
+        public string error { get; set; }
 
-        public RetornoXmlCCT(string message, string status, string code)
+        public RetornoXmlCCT(string message, string status, string code, string error)
         {
             this.message = message;
             this.status = status;
             this.code = code;
-        }
-
-        public RetornoXmlCCT(string identificador)
-        {
-            Identificador = identificador;
+            this.error = error;
         }
 
         public RetornoXmlCCT()

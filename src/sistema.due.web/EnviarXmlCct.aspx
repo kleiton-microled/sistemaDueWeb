@@ -20,7 +20,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="pull-right">
-                                                    <a href="Consulta_CCT.pdf" target="_blank">
+                                                    <a href="Envio_de_notas_CCT.pdf" target="_blank">
                                                         <img src="Content/imagens/btnInstrucoes.png" /></a>
                                                 </div>
                                             </div>
