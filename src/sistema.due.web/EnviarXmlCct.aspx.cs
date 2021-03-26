@@ -40,7 +40,7 @@ namespace Cargill.DUE.Web
                 String str = Server.HtmlEncode(txtUpload.FileName);
                 String ext = Path.GetExtension(str);
                 file = str;
-                if ((ext == ".csv"))
+                if ((ext == ".csv") || (ext == ".txt"))
                 {
                     path += str;
 
@@ -156,17 +156,23 @@ namespace Cargill.DUE.Web
                     string cnpj = split[1];
                     string cpfCondutor = split[6];
                     string chaveAcesso = split[4];
+                    string cnpjTransportador = split[5];
                     if (cnpj.Length < 14)
                     {
                        cnpj = cnpj.PadLeft(14, '0');
                     }
-                    if (cpfCondutor.Length < 11)
+
+                    if (cpfCondutor.Length < 11 && cpfCondutor.Length > 0)
                     {
                         cpfCondutor = cpfCondutor.PadLeft(11, '0');
                     }
                     if (chaveAcesso.Length < 44)
                     {
                         chaveAcesso = chaveAcesso.PadLeft(44, '0');
+                    }
+                    if (cnpjTransportador.Length < 14 && cnpjTransportador.Length > 11)
+                    {
+                        cnpjTransportador = cnpjTransportador.PadLeft(14, '0');
                     }
                     #region Montando o XML
                     XDocument doc = new XDocument(
@@ -184,8 +190,8 @@ namespace Cargill.DUE.Web
                             new XElement("chaveAcesso", chaveAcesso)
                                         )),
                 new XElement("transportador",
-                split[5].ToString().Count() > 11 ? new XElement("cnpj", split[5]) : null,
-                split[5].ToString().Count() < 14 ? new XElement("cpf", split[5]) : null,
+                cnpjTransportador.ToString().Count() > 11 ? new XElement("cnpj", cnpjTransportador) : null,
+                cnpjTransportador.ToString().Count() < 14 ? new XElement("cpf", cnpjTransportador) : null,
                 //new XElement("cnpj", fields[5]),
                 split[6] == null ? new XElement("cpfCondutor", cpfCondutor) : null
                 //new XElement("cpfCondutor", fields[6])
